@@ -1,12 +1,20 @@
-import React, { useState } from "react";
+import React, { FormEvent, useState } from "react";
 
 function ProductForm() {
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState(0);
   const [category, setCategory] = useState("");
 
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    console.log({
+      description: description,
+      amount: amount,
+      category: category,
+    });
+  };
   return (
-    <form action="" className="mx-5">
+    <form onSubmit={(e) => handleSubmit(e)} action="" className="mx-5">
       <div className="mb-3">
         <label
           className="form-label"
