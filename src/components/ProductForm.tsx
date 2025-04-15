@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 
 function ProductForm() {
+  const [description, setDescription] = useState("");
+  const [amount, setAmount] = useState(0);
+  const [category, setCategory] = useState("");
+
   return (
     <form action="" className="mx-5">
       <div className="mb-3">
@@ -11,7 +15,13 @@ function ProductForm() {
         >
           Description
         </label>
-        <input className="form-control" type="text" id="description" />
+        <input
+          onChange={(e) => setDescription(e.target.value)}
+          value={description}
+          className="form-control"
+          type="text"
+          id="description"
+        />
         <div className="form-text text-danger" id="descriptionError">
           error
         </div>
@@ -21,7 +31,13 @@ function ProductForm() {
         <label className="form-label" htmlFor="amount" id="amountLabel">
           Amount
         </label>
-        <input type="number" className="form-control" id="amount" />
+        <input
+          onChange={(e) => setAmount(parseInt(e.target.value))}
+          value={amount}
+          type="number"
+          className="form-control"
+          id="amount"
+        />
         <div className="form-text text-danger" id="amountError">
           error
         </div>
@@ -31,11 +47,16 @@ function ProductForm() {
         <label className="form-label" htmlFor="category" id="categoryLabel">
           Category
         </label>
-        <select className="form-select" aria-label="Default select example">
+        <select
+          onChange={(e) => setCategory(e.target.value)}
+          value={category}
+          className="form-select"
+          aria-label="Default select example"
+        >
           {/* <option selected>Open this select menu</option> */}
-          <option value="1">One</option>
-          <option value="2">Two</option>
-          <option value="3">Three</option>
+          <option value="one">One</option>
+          <option value="two">Two</option>
+          <option value="three">Three</option>
         </select>
         <div className="form-text text-danger" id="categoryError">
           error
