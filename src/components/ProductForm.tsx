@@ -1,78 +1,118 @@
 import React, { FormEvent, useState } from "react";
 
 function ProductForm() {
-  const [description, setDescription] = useState("");
-  const [amount, setAmount] = useState(0);
-  const [category, setCategory] = useState("");
+  const [form, setForm] = useState({
+    description: "",
+    amount: "",
+    category: "",
+  });
+
+  const [errors, setErrors] = useState({
+    description: "",
+    amount: "",
+    category: "",
+  });
+
+  const validateField = (name: string, value: string) => {
+    switch (name) {
+      case "description":
+        return value.trim() === "" ? "Description is required" : "";
+      case "amount":
+        return value === "" || Number(value) <= 0
+          ? "Amount must be greater than 0"
+          : "";
+      case "category":
+        return value === "" ? "Category is required" : "";
+      default:
+        return "";
+    }
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+
+    setForm((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: validateField(name, value) }));
+  };
+
+  const validateForm = () => {
+    const newErrors = {
+      description: validateField("description", form.description),
+      amount: validateField("amount", form.amount),
+      category: validateField("category", form.category),
+    };
+
+    setErrors(newErrors);
+    return Object.values(newErrors).every((err) => err === "");
+  };
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    console.log({
-      description: description,
-      amount: amount,
-      category: category,
-    });
+    if (!validateForm()) return;
+
+    console.log(form);
   };
+
   return (
-    <form onSubmit={(e) => handleSubmit(e)} action="" className="mx-5">
+    <form onSubmit={handleSubmit} className="mx-5">
       <div className="mb-3">
-        <label
-          className="form-label"
-          htmlFor="description"
-          id="descriptionLabel"
-        >
+        <label htmlFor="description" className="form-label">
           Description
         </label>
         <input
-          onChange={(e) => setDescription(e.target.value)}
-          value={description}
-          className="form-control"
           type="text"
           id="description"
+          name="description"
+          value={form.description}
+          onChange={handleChange}
+          className="form-control"
         />
-        <div className="form-text text-danger" id="descriptionError">
-          error
-        </div>
+        {errors.description && (
+          <div className="form-text text-danger">{errors.description}</div>
+        )}
       </div>
 
       <div className="mb-3">
-        <label className="form-label" htmlFor="amount" id="amountLabel">
+        <label htmlFor="amount" className="form-label">
           Amount
         </label>
         <input
-          onChange={(e) => setAmount(parseInt(e.target.value))}
-          value={amount}
           type="number"
-          className="form-control"
           id="amount"
+          name="amount"
+          value={form.amount}
+          onChange={handleChange}
+          className="form-control"
         />
-        <div className="form-text text-danger" id="amountError">
-          error
-        </div>
+        {errors.amount && (
+          <div className="form-text text-danger">{errors.amount}</div>
+        )}
       </div>
 
       <div className="mb-3">
-        <label className="form-label" htmlFor="category" id="categoryLabel">
+        <label htmlFor="category" className="form-label">
           Category
         </label>
         <select
-          onChange={(e) => setCategory(e.target.value)}
-          value={category}
+          id="category"
+          name="category"
+          value={form.category}
+          onChange={handleChange}
           className="form-select"
-          aria-label="Default select example"
         >
-          {/* <option selected>Open this select menu</option> */}
+          <option value="">Select category</option>
           <option value="one">One</option>
           <option value="two">Two</option>
           <option value="three">Three</option>
         </select>
-        <div className="form-text text-danger" id="categoryError">
-          error
-        </div>
+        {errors.category && (
+          <div className="form-text text-danger">{errors.category}</div>
+        )}
       </div>
-      <div className="mb-3">
-        <button className="btn btn-primary">Submit</button>
-      </div>
+
+      <button className="btn btn-primary">Submit</button>
     </form>
   );
 }
