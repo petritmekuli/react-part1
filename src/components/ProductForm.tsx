@@ -56,7 +56,7 @@ function ProductForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="mx-5">
+    <form onSubmit={handleSubmit}>
       <div className="mb-3">
         <label htmlFor="description" className="form-label">
           Description
