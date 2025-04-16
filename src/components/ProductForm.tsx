@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 
 function ProductForm() {
   const [form, setForm] = useState({
@@ -29,7 +29,7 @@ function ProductForm() {
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
 
@@ -103,9 +103,9 @@ function ProductForm() {
           className="form-select"
         >
           <option value="">Select category</option>
-          <option value="one">One</option>
-          <option value="two">Two</option>
-          <option value="three">Three</option>
+          <option value="1">Groceries</option>
+          <option value="2">Utilities</option>
+          <option value="3">Entertainment</option>
         </select>
         {errors.category && (
           <div className="form-text text-danger">{errors.category}</div>
