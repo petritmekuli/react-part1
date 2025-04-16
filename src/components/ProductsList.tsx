@@ -40,8 +40,8 @@ function ProductsList({ products, deleteProduct }: Props) {
           </tr>
         </thead>
         <tbody>
-          {productsToBeDisplayed.map((p) => (
-            <tr>
+          {productsToBeDisplayed.map((p, index) => (
+            <tr key={index}>
               <td>{p.description}</td>
               <td>{p.amount} $</td>
               <td>{p.category}</td>

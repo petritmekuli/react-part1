@@ -1,6 +1,12 @@
 import { ChangeEvent, FormEvent, useState } from "react";
+import { Product } from "../App";
 
-function ProductForm() {
+interface Props {
+  onSubmit: (product: Product) => void;
+  nextId: number;
+}
+
+function ProductForm({ onSubmit, nextId }: Props) {
   const [form, setForm] = useState({
     description: "",
     amount: "",
@@ -52,7 +58,9 @@ function ProductForm() {
     e.preventDefault();
     if (!validateForm()) return;
 
-    console.log(form);
+    const product = { id: nextId, ...form, amount: parseInt(form.amount) };
+    console.log(product);
+    onSubmit(product);
   };
 
   return (
@@ -103,9 +111,9 @@ function ProductForm() {
           className="form-select"
         >
           <option value="">Select category</option>
-          <option value="1">Groceries</option>
-          <option value="2">Utilities</option>
-          <option value="3">Entertainment</option>
+          <option value="Groceries">Groceries</option>
+          <option value="Utilities">Utilities</option>
+          <option value="Entertainment">Entertainment</option>
         </select>
         {errors.category && (
           <div className="form-text text-danger">{errors.category}</div>

@@ -17,7 +17,11 @@ function App() {
 
   return (
     <>
-      <ProductForm />
+      <ProductForm
+        onSubmit={(product: Product) => setProducts([...products, product])}
+        nextId={products.length + 1}
+      />
+
       <ProductsList
         products={products}
         deleteProduct={(id: number) => {
