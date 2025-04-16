@@ -1,4 +1,9 @@
-function ProductsList() {
+import { Product } from "../App";
+
+interface Props {
+  products: Product[];
+}
+function ProductsList({ products }: Props) {
   return (
     <div className="mt-5">
       <div className="mb-3">
@@ -25,15 +30,21 @@ function ProductsList() {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Milk</td>
-            <td>5</td>
-            <td>Groceries</td>
-            <td>delete</td>
-          </tr>
+          {products.map((p) => (
+            <tr>
+              <td>{p.description}</td>
+              <td>{p.amount}</td>
+              <td>{p.category}</td>
+              <td>Delete</td>
+            </tr>
+          ))}
           <tr>
             <td>Total</td>
-            <td>20</td>
+            <td>
+              {products.reduce((total, product) => {
+                return total + product.amount;
+              }, 0)}
+            </td>
             <td></td>
             <td></td>
           </tr>
