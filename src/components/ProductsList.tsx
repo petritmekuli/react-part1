@@ -3,8 +3,10 @@ import { Product } from "../App";
 
 interface Props {
   products: Product[];
+  deleteProduct: (id: number) => void;
 }
-function ProductsList({ products }: Props) {
+
+function ProductsList({ products, deleteProduct }: Props) {
   const [category, setCategory] = useState("");
 
   let productsToBeDisplayed =
@@ -43,7 +45,15 @@ function ProductsList({ products }: Props) {
               <td>{p.description}</td>
               <td>{p.amount} $</td>
               <td>{p.category}</td>
-              <td>Delete</td>
+              <td>
+                {/* button */}
+                <button
+                  onClick={() => deleteProduct(p.id)}
+                  className="btn btn-danger"
+                >
+                  Delete
+                </button>
+              </td>
             </tr>
           ))}
           <tr>
