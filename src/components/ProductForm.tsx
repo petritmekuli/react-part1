@@ -58,9 +58,20 @@ function ProductForm({ onSubmit, nextId }: Props) {
     e.preventDefault();
     if (!validateForm()) return;
 
-    const product = { id: nextId, ...form, amount: parseInt(form.amount) };
+    const description = form.description
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+
+    const product = {
+      id: nextId,
+      ...form,
+      description: description,
+      amount: parseInt(form.amount),
+    };
     console.log(product);
     onSubmit(product);
+    setForm({ description: "", amount: "", category: "" });
   };
 
   return (
