@@ -9,7 +9,12 @@ export interface Product {
   id: number;
   description: string;
   amount: number;
-  category: string;
+  category_id: number;
+}
+export interface ProductForm {
+  description: string;
+  amount: number;
+  category_id: number;
 }
 
 function App() {
@@ -18,8 +23,11 @@ function App() {
   return (
     <>
       <ProductForm
-        onSubmit={(product: Product) => setProducts([...products, product])}
-        nextId={products.length + 1}
+        onSubmit={
+          (product) =>
+            setProducts([...products, { id: products.length + 1, ...product }])
+          //We could also make a POST request to the server here
+        }
       />
 
       <ProductsList

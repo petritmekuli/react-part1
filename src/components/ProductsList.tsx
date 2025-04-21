@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Product } from "../App";
+import { categories } from "../data";
 
 interface Props {
   products: Product[];
@@ -7,27 +8,29 @@ interface Props {
 }
 
 function ProductsList({ products, deleteProduct }: Props) {
-  const [category, setCategory] = useState("");
+  const [categoryId, setCategoryId] = useState("");
 
   let productsToBeDisplayed =
-    category === ""
+    categoryId === ""
       ? products
-      : products.filter((p) => p.category === category);
+      : products.filter((p) => p.category_id === parseInt(categoryId));
 
   return (
     <div className="mt-5">
       <div className="mb-3">
         <select
-          id="category"
-          name="category"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
+          id="category_id"
+          name="category_id"
+          value={categoryId}
+          onChange={(e) => setCategoryId(e.target.value)}
           className="form-select"
         >
           <option value="">All categories</option>
-          <option value="Groceries">Groceries</option>
-          <option value="Utilities">Utilities</option>
-          <option value="Entertainment">Entertainment</option>
+          {categories.map((c) => (
+            <option value={c.id} key={c.id}>
+              {c.name}
+            </option>
+          ))}
         </select>
       </div>
       <table className="table">
@@ -44,7 +47,7 @@ function ProductsList({ products, deleteProduct }: Props) {
             <tr key={index}>
               <td>{p.description}</td>
               <td>{p.amount} $</td>
-              <td>{p.category}</td>
+              <td>{categories.find((c) => c.id === p.category_id)?.name}</td>
               <td>
                 {/* button */}
                 <button

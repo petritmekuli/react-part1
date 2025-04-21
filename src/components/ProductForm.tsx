@@ -1,22 +1,22 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import { Product } from "../App";
+import { ProductForm as FormData } from "../App";
+import { categories } from "../data";
 
 interface Props {
-  onSubmit: (product: Product) => void;
-  nextId: number;
+  onSubmit: (productForm: FormData) => void;
 }
 
-function ProductForm({ onSubmit, nextId }: Props) {
+function ProductForm({ onSubmit }: Props) {
   const [form, setForm] = useState({
     description: "",
     amount: "",
-    category: "",
+    category_id: "",
   });
 
   const [errors, setErrors] = useState({
     description: "",
     amount: "",
-    category: "",
+    category_id: "",
   });
 
   const validateField = (name: string, value: string) => {
@@ -27,7 +27,7 @@ function ProductForm({ onSubmit, nextId }: Props) {
         return value === "" || Number(value) <= 0
           ? "Amount must be greater than 0"
           : "";
-      case "category":
+      case "category_id":
         return value === "" ? "Category is required" : "";
       default:
         return "";
@@ -47,7 +47,7 @@ function ProductForm({ onSubmit, nextId }: Props) {
     const newErrors = {
       description: validateField("description", form.description),
       amount: validateField("amount", form.amount),
-      category: validateField("category", form.category),
+      category_id: validateField("category_id", form.category_id),
     };
 
     setErrors(newErrors);
@@ -64,14 +64,14 @@ function ProductForm({ onSubmit, nextId }: Props) {
       .join(" ");
 
     const product = {
-      id: nextId,
       ...form,
       description: description,
       amount: parseInt(form.amount),
+      category_id: parseInt(form.category_id),
     };
     console.log(product);
     onSubmit(product);
-    setForm({ description: "", amount: "", category: "" });
+    setForm({ description: "", amount: "", category_id: "" });
   };
 
   return (
@@ -111,23 +111,25 @@ function ProductForm({ onSubmit, nextId }: Props) {
       </div>
 
       <div className="mb-3">
-        <label htmlFor="category" className="form-label">
+        <label htmlFor="category_id" className="form-label">
           Category
         </label>
         <select
-          id="category"
-          name="category"
-          value={form.category}
+          id="category_id"
+          name="category_id"
+          value={form.category_id}
           onChange={handleChange}
           className="form-select"
         >
           <option value="">Select category</option>
-          <option value="Groceries">Groceries</option>
-          <option value="Utilities">Utilities</option>
-          <option value="Entertainment">Entertainment</option>
+          {categories.map((c) => (
+            <option value={c.id} key={c.id}>
+              {c.name}
+            </option>
+          ))}
         </select>
-        {errors.category && (
-          <div className="form-text text-danger">{errors.category}</div>
+        {errors.category_id && (
+          <div className="form-text text-danger">{errors.category_id}</div>
         )}
       </div>
 
