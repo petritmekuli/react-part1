@@ -10,5 +10,10 @@ export default defineConfig({
     // hey! 👋 over here
     globals: true,
     setupFiles: "./tests/setup.js", // assuming the test folder is in the root of our project
+    coverage: {
+      enabled: true,
+      reporter: ["text", "html"], // 'html' enables the UI tab
+      reportsDirectory: "./coverage", // optional
+    },
   },
 } as UserConfig);
