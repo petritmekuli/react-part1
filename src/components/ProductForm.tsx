@@ -22,7 +22,12 @@ function ProductForm({ onSubmit }: Props) {
   const validateField = (name: string, value: string) => {
     switch (name) {
       case "description":
-        return value.trim() === "" ? "Description is required" : "";
+        if (value.trim() === "") {
+          return "Description is required";
+        } else if (/^\d/.test(value)) {
+          return "Description cannot start with a number";
+        }
+        return "";
       case "amount":
         return value === "" || Number(value) <= 0
           ? "Amount must be greater than 0"
