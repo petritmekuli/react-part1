@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 
 import ProductForm from "./components/ProductForm";
 import ProductsList from "./components/ProductsList";
-import { productsData } from "./data";
+// import { productsData } from "./data";
 
 export interface Product {
   id: number;
@@ -18,8 +18,26 @@ export interface ProductForm {
 }
 
 function App() {
-  const [products, setProducts] = useState<Product[]>(productsData);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [productsError, setProductsError] = useState<Error | null>(null);
+  const [isLoadingProducts, setIsLoadingProducts] = useState(false);
 
+  useEffect(() => {
+    setIsLoadingProducts(true);
+    fetch("http://localhost:8888/products")
+      .then((res) => res.json())
+      .then((data) => {
+        setProducts(data);
+        setIsLoadingProducts(false);
+      })
+      .catch((err) => {
+        setProductsError(err);
+        setIsLoadingProducts(false);
+      })
+      .finally(() => {
+        setIsLoadingProducts(false);
+      });
+  }, []);
   return (
     <>
       <ProductForm
@@ -35,6 +53,8 @@ function App() {
         deleteProduct={(id: number) => {
           setProducts(products.filter((p) => p.id !== id));
         }}
+        isLoadingProducts={isLoadingProducts}
+        productsError={productsError}
       />
     </>
   );

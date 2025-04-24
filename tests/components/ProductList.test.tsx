@@ -29,7 +29,7 @@ describe("Product List", () => {
 
   it("should render the category filter with the right options", async () => {
     renderComponent([]);
-    const filter = screen.getByRole("combobox");
+    const filter = await screen.findByRole("combobox");
     expect(filter).toHaveTextContent(/categories/i);
 
     const user = userEvent.setup();
@@ -61,7 +61,7 @@ describe("Product List", () => {
       renderComponent();
 
       const user = userEvent.setup();
-      const filter = screen.getByRole("combobox");
+      const filter = await screen.findByRole("combobox");
       expect(filter).toHaveTextContent(/categories/i);
       await user.selectOptions(filter, name);
       // screen.logTestingPlaygroundURL();
@@ -119,7 +119,7 @@ describe("Product List", () => {
     renderComponent(productsData);
 
     const user = userEvent.setup();
-    const filter = screen.getByRole("combobox");
+    const filter = await screen.findByRole("combobox");
     expect(filter).toHaveTextContent(/categories/i);
 
     await user.selectOptions(filter, categories.find((c) => c.id === 1)?.name!);
