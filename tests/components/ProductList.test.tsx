@@ -10,9 +10,18 @@ import { Product } from "../../src/App";
 describe("Product List", () => {
   const renderComponent = (
     products = productsData,
-    deleteProduct = vi.fn()
+    deleteProduct = vi.fn(),
+    isLoadingProducts = false,
+    productsError: null | Error = null
   ) => {
-    render(<ProductsList products={products} deleteProduct={deleteProduct} />);
+    render(
+      <ProductsList
+        products={products}
+        deleteProduct={deleteProduct}
+        isLoadingProducts={isLoadingProducts}
+        productsError={productsError}
+      />
+    );
   };
 
   it("shows all the products(unfiltered) in the initial render", () => {
@@ -116,7 +125,7 @@ describe("Product List", () => {
       return total + product.amount;
     }, 0);
 
-    renderComponent(productsData);
+    renderComponent();
 
     const user = userEvent.setup();
     const filter = await screen.findByRole("combobox");
@@ -133,5 +142,17 @@ describe("Product List", () => {
     // expect(
     //   screen.getByText(new RegExp(`${total}\\s*\\$`, "i"))
     // ).toBeInTheDocument();
+  });
+
+  it("should show the loading indicator before the products has been fetched", () => {
+    renderComponent([], vi.fn(), true, null);
+
+    expect(screen.getByText(/loading products/i)).toBeInTheDocument();
+  });
+
+  it("should show the error message if the products cannot be fetched", () => {
+    renderComponent([], vi.fn(), false, new Error("Error fetching products"));
+
+    expect(screen.getByText(/error fetching products/i)).toBeInTheDocument();
   });
 });

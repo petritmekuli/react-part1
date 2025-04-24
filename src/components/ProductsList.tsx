@@ -48,7 +48,6 @@ function ProductsList({
 
   return (
     <div className="mt-5">
-      {/* {isLoadingCategories } */}
       {categoriesError ? (
         categoriesError.message
       ) : isLoadingCategories ? (
@@ -82,9 +81,13 @@ function ProductsList({
         </thead>
         <tbody>
           {productsError ? (
-            <div className="">{productsError.message}</div>
+            <tr>
+              <td>{productsError.message}</td>
+            </tr>
           ) : isLoadingProducts ? (
-            <div className="">Loading Products...</div>
+            <tr>
+              <td>Loading Products...</td>
+            </tr>
           ) : (
             <>
               {productsToBeDisplayed.map((p, index) => (
