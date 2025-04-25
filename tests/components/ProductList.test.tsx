@@ -1,3 +1,5 @@
+import { server } from "../mocks/server";
+import { HttpResponse, delay, http } from "msw";
 import { describe, expect, it, vi } from "vitest";
 import "@testing-library/jest-dom/vitest";
 import { render, screen, waitFor } from "@testing-library/react";
@@ -34,6 +36,15 @@ describe("Product List", () => {
         })
       ).toBeInTheDocument()
     );
+  });
+
+  it("should render the error if categories cannot be fetched", async () => {
+    server.use(
+      http.get("http://localhost:8888/categories", () => HttpResponse.error())
+    );
+    renderComponent();
+
+    expect(await screen.findByText(/failed to fetch/i)).toBeInTheDocument();
   });
 
   it("should render the category filter with the right options", async () => {
