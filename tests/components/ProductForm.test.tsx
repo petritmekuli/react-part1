@@ -175,4 +175,41 @@ describe("Product Form", () => {
       ).toBeInTheDocument();
     }
   );
+  it("should show loading when fetching categories", () => {
+    render(
+      <ProductForm
+        categories={[]}
+        isLoadingCategories={true}
+        categoriesError={null}
+        onSubmit={vi.fn()}
+      />
+    );
+
+    const loadingText = screen.getByText(/loading categories/i);
+    expect(loadingText).toBeInTheDocument();
+  });
+
+  it("should show no categories found when no categories found", () => {
+    render(
+      <ProductForm
+        categories={[]}
+        isLoadingCategories={false}
+        categoriesError={null}
+        onSubmit={vi.fn()}
+      />
+    );
+    expect(screen.getByText(/no categories found/i)).toBeInTheDocument();
+  });
+
+  it("should show failed fetching when some network issues", () => {
+    render(
+      <ProductForm
+        categories={[]}
+        isLoadingCategories={false}
+        categoriesError={new Error("Network error")}
+        onSubmit={vi.fn()}
+      />
+    );
+    expect(screen.getByText(/failed fetching categories/i)).toBeInTheDocument();
+  });
 });

@@ -166,4 +166,51 @@ describe("Product List", () => {
 
     expect(screen.getByText(/error fetching products/i)).toBeInTheDocument();
   });
+
+  it("should show loading when fetching categories", () => {
+    render(
+      <ProductsList
+        products={[]}
+        deleteProduct={vi.fn()}
+        isLoadingProducts={false}
+        productsError={null}
+        categories={[]}
+        isLoadingCategories={true}
+        categoriesError={null}
+      />
+    );
+
+    const loadingText = screen.getByText(/loading categories/i);
+    expect(loadingText).toBeInTheDocument();
+  });
+
+  it("should show no categories found when no categories found", () => {
+    render(
+      <ProductsList
+        products={[]}
+        deleteProduct={vi.fn()}
+        isLoadingProducts={false}
+        productsError={null}
+        categories={[]}
+        isLoadingCategories={false}
+        categoriesError={null}
+      />
+    );
+    expect(screen.getByText(/no categories found/i)).toBeInTheDocument();
+  });
+
+  it("should show failed fetching when some network issues", () => {
+    render(
+      <ProductsList
+        products={[]}
+        deleteProduct={vi.fn()}
+        isLoadingProducts={false}
+        productsError={null}
+        categories={[]}
+        isLoadingCategories={false}
+        categoriesError={new Error("Network error")}
+      />
+    );
+    expect(screen.getByText(/failed fetching categories/i)).toBeInTheDocument();
+  });
 });
