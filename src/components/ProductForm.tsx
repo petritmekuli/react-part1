@@ -1,12 +1,20 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import { ProductForm as FormData } from "../App";
-import { categories } from "../data";
+import { Category, ProductForm as FormData } from "../App";
+// import { categories } from "../data";
 
 interface Props {
+  categories: Category[];
+  isLoadingCategories: boolean;
+  categoriesError: Error | null;
   onSubmit: (productForm: FormData) => void;
 }
 
-function ProductForm({ onSubmit }: Props) {
+function ProductForm({
+  categories,
+  isLoadingCategories,
+  categoriesError,
+  onSubmit,
+}: Props) {
   const [form, setForm] = useState({
     description: "",
     amount: "",
@@ -119,20 +127,33 @@ function ProductForm({ onSubmit }: Props) {
         <label htmlFor="category_id" className="form-label">
           Category
         </label>
-        <select
-          id="category_id"
-          name="category_id"
-          value={form.category_id}
-          onChange={handleChange}
-          className="form-select"
-        >
-          <option value="">Select category</option>
-          {categories.map((c) => (
-            <option value={c.id} key={c.id}>
-              {c.name}
-            </option>
-          ))}
-        </select>
+        {isLoadingCategories ? (
+          <p>Loading categories...</p>
+        ) : categoriesError ? (
+          <p className="text-danger">Failed fetching categories</p>
+        ) : categories.length === 0 ? (
+          <p className="text-danger">No categories found.</p>
+        ) : (
+          <div className="mb-3">
+            <select
+              id="category_id"
+              name="category_id"
+              value={form.category_id}
+              onChange={(e) =>
+                setForm({ ...form, category_id: e.target.value })
+              }
+              className="form-select"
+            >
+              <option value="">All categories</option>
+              {categories.map((c) => (
+                <option value={c.id} key={c.id}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+
         {errors.category_id && (
           <div className="form-text text-danger">{errors.category_id}</div>
         )}

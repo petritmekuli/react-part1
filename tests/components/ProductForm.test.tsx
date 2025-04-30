@@ -1,4 +1,5 @@
 import "@testing-library/jest-dom/vitest";
+import { categories } from "../data";
 import { describe, expect, it, vi } from "vitest";
 import ProductForm from "../../src/components/ProductForm";
 import { render, screen } from "@testing-library/react";
@@ -13,7 +14,14 @@ describe("Product Form", () => {
   it("should render all the form fields", () => {
     const mockOnSubmit = vi.fn();
 
-    render(<ProductForm onSubmit={mockOnSubmit} />);
+    render(
+      <ProductForm
+        categories={categories}
+        isLoadingCategories={false}
+        categoriesError={null}
+        onSubmit={mockOnSubmit}
+      />
+    );
 
     const descriptionInput = screen.getByLabelText(/description/i);
     const amountInput = screen.getByLabelText(/amount/i);
@@ -28,7 +36,15 @@ describe("Product Form", () => {
 
   it("should submit the right data", async () => {
     const mockOnSubmit = vi.fn();
-    render(<ProductForm onSubmit={mockOnSubmit} />);
+    render(
+      <ProductForm
+        categories={categories}
+        isLoadingCategories={false}
+        categoriesError={null}
+        onSubmit={mockOnSubmit}
+      />
+    );
+
     const descriptionInput = screen.getByLabelText(/description/i);
     const amountInput = screen.getByLabelText(/amount/i);
     const categoryInput = screen.getByLabelText(/category/i);
@@ -62,7 +78,14 @@ describe("Product Form", () => {
   ])(
     "should show $errorMessage when description is $scenario",
     async ({ errorMessage, descriptionValue }) => {
-      render(<ProductForm onSubmit={vi.fn()} />);
+      render(
+        <ProductForm
+          categories={categories}
+          isLoadingCategories={false}
+          categoriesError={null}
+          onSubmit={vi.fn()}
+        />
+      );
       const descriptionInput = screen.getByLabelText(/description/i);
       const amountInput = screen.getByLabelText(/amount/i);
       const categoryInput = screen.getByLabelText(/category/i);
@@ -94,7 +117,14 @@ describe("Product Form", () => {
   ])(
     "should show $errorMessage when description is $scenario",
     async ({ errorMessage, amountValue }) => {
-      render(<ProductForm onSubmit={vi.fn()} />);
+      render(
+        <ProductForm
+          categories={categories}
+          isLoadingCategories={false}
+          categoriesError={null}
+          onSubmit={vi.fn()}
+        />
+      );
       const descriptionInput = screen.getByLabelText(/description/i);
       const amountInput = screen.getByLabelText(/amount/i);
       const categoryInput = screen.getByLabelText(/category/i);
@@ -121,7 +151,14 @@ describe("Product Form", () => {
   ])(
     "should show $errorMessage when category is $scenario",
     async ({ errorMessage, categoryValue }) => {
-      render(<ProductForm onSubmit={vi.fn()} />);
+      render(
+        <ProductForm
+          categories={categories}
+          isLoadingCategories={false}
+          categoriesError={null}
+          onSubmit={vi.fn()}
+        />
+      );
       const descriptionInput = screen.getByLabelText(/description/i);
       const amountInput = screen.getByLabelText(/amount/i);
       const categoryInput = screen.getByLabelText(/category/i);

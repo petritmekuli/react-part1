@@ -22,6 +22,9 @@ describe("Product List", () => {
         deleteProduct={deleteProduct}
         isLoadingProducts={isLoadingProducts}
         productsError={productsError}
+        categories={categories}
+        isLoadingCategories={false}
+        categoriesError={null}
       />
     );
   };
@@ -39,10 +42,7 @@ describe("Product List", () => {
   });
 
   it("should render the error if categories cannot be fetched", async () => {
-    server.use(
-      http.get("http://localhost:8888/categories", () => HttpResponse.error())
-    );
-    renderComponent();
+    renderComponent([], vi.fn(), false, new Error("Failed to fetch"));
 
     expect(await screen.findByText(/failed to fetch/i)).toBeInTheDocument();
   });

@@ -1,17 +1,15 @@
-import { useEffect, useState } from "react";
-import { Product } from "../App";
+import { useState } from "react";
+import { Category, Product } from "../App";
 // import { categories } from "../data";
-
-interface Category {
-  id: number;
-  name: string;
-}
 
 interface Props {
   products: Product[];
   deleteProduct: (id: number) => void;
   isLoadingProducts: boolean;
   productsError: Error | null;
+  categories: Category[];
+  isLoadingCategories: boolean;
+  categoriesError: Error | null;
 }
 
 function ProductsList({
@@ -19,27 +17,11 @@ function ProductsList({
   deleteProduct,
   isLoadingProducts,
   productsError,
+  categories,
+  isLoadingCategories,
+  categoriesError,
 }: Props) {
   const [categoryId, setCategoryId] = useState("");
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [isLoadingCategories, setIsLoadingCategories] = useState(false);
-  const [categoriesError, setCategoriesError] = useState<Error | null>(null);
-
-  useEffect(() => {
-    setIsLoadingCategories(true);
-    fetch("http://localhost:8888/categories")
-      .then((res) => res.json())
-      .then((data) => {
-        setCategories(data);
-        setIsLoadingCategories(false);
-      })
-      .catch((err) => {
-        setCategoriesError(err);
-      })
-      .finally(() => {
-        setIsLoadingCategories(false);
-      });
-  }, []);
 
   let productsToBeDisplayed =
     categoryId === ""
@@ -48,10 +30,12 @@ function ProductsList({
 
   return (
     <div className="mt-5">
-      {categoriesError ? (
-        categoriesError.message
-      ) : isLoadingCategories ? (
-        "Loading categories..."
+      {isLoadingCategories ? (
+        <p>Loading categories...</p>
+      ) : categoriesError ? (
+        <p className="text-danger">Failed fetching categories</p>
+      ) : categories.length === 0 ? (
+        <p className="text-danger">No categories found.</p>
       ) : (
         <div className="mb-3">
           <select
@@ -70,6 +54,7 @@ function ProductsList({
           </select>
         </div>
       )}
+
       <table className="table">
         <thead>
           <tr>
@@ -84,7 +69,7 @@ function ProductsList({
             <tr>
               <td>{productsError.message}</td>
             </tr>
-          ) : isLoadingProducts ? (
+          ) : isLoadingProducts || products.length === 0 ? (
             <tr>
               <td>Loading Products...</td>
             </tr>
