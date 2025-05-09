@@ -30,6 +30,7 @@ function ProductsList({
 
   return (
     <div className="mt-5">
+      <h1 className="mb-3">List Of Products</h1>
       {isLoadingCategories ? (
         <p>Loading categories...</p>
       ) : categoriesError ? (

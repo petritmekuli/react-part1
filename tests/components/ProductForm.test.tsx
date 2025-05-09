@@ -139,6 +139,8 @@ describe("Product Form", () => {
       expect(
         screen.getByText(new RegExp(errorMessage, "i"))
       ).toBeInTheDocument();
+
+      expect(submitButton).toBeDisabled();
     }
   );
 
@@ -173,6 +175,8 @@ describe("Product Form", () => {
       expect(
         screen.getByText(new RegExp(errorMessage, "i"))
       ).toBeInTheDocument();
+
+      expect(submitButton).toBeDisabled();
     }
   );
   it("should show loading when fetching categories", () => {
