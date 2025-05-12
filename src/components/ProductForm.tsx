@@ -78,16 +78,38 @@ function ProductForm({
 
     const product = {
       ...form,
+      id: Date.now().toString(), //toString because json-server works properly only with string ids
       description: description,
       amount: parseInt(form.amount),
       category_id: parseInt(form.category_id),
     };
-    console.log(product);
-    dispatch({
-      type: "added",
-      product: { id: Date.now(), ...product },
-    });
-    setForm({ description: "", amount: "", category_id: "" });
+
+    // Pessimistic UI update
+    fetch("http://localhost:8888/products", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(product),
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to create product");
+        }
+        return res.json(); // Parse the JSON response
+      })
+      .then((createdProduct) => {
+        dispatch({
+          type: "added",
+          product: createdProduct,
+        });
+
+        // Reset the form after successful submission
+        setForm({ description: "", amount: "", category_id: "" });
+      })
+      .catch((error) => {
+        alert("An error occurred while creating the product.");
+      });
   };
 
   const formHasErrors = () => {

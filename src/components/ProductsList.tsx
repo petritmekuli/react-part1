@@ -29,6 +29,25 @@ function ProductsList({
       ? products
       : products.filter((p) => p.category_id === parseInt(categoryId));
 
+  const handleDelete = (id: number) => {
+    // Pessimistic UI update
+    fetch(`http://localhost:8888/products/${id}`, {
+      method: "DELETE",
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to delete product");
+        }
+        return res.json();
+      })
+      .then((deletedProduct) => {
+        dispatch({ type: "deleted", id: deletedProduct.id });
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
   return (
     <div className="mt-5">
       <h1 className="mb-3">List Of Products</h1>
@@ -88,12 +107,7 @@ function ProductsList({
                   <td>{categories.find((c) => c.id == p.category_id)?.name}</td>
                   <td>
                     <button
-                      onClick={() =>
-                        dispatch({
-                          type: "deleted",
-                          id: p.id,
-                        })
-                      }
+                      onClick={() => handleDelete(p.id)}
                       className="btn btn-danger"
                     >
                       Delete
