@@ -1,19 +1,20 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Category, ProductForm as FormData } from "../App";
+import { Action } from "../reducers/productsReducer";
 // import { categories } from "../data";
 
 interface Props {
   categories: Category[];
   isLoadingCategories: boolean;
   categoriesError: Error | null;
-  onSubmit: (productForm: FormData) => void;
+  dispatch: (action: Action) => void;
 }
 
 function ProductForm({
   categories,
   isLoadingCategories,
   categoriesError,
-  onSubmit,
+  dispatch,
 }: Props) {
   const [form, setForm] = useState({
     description: "",
@@ -82,7 +83,10 @@ function ProductForm({
       category_id: parseInt(form.category_id),
     };
     console.log(product);
-    onSubmit(product);
+    dispatch({
+      type: "added",
+      product: { id: Date.now(), ...product },
+    });
     setForm({ description: "", amount: "", category_id: "" });
   };
 

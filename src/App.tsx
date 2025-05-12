@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import "./App.css";
 
 import ProductForm from "./components/ProductForm";
 import ProductsList from "./components/ProductsList";
+import productsReducer from "./reducers/productsReducer";
 
 export interface Category {
   id: number;
@@ -23,7 +24,7 @@ export interface ProductForm {
 }
 
 function App() {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, dispatch] = useReducer(productsReducer, []);
   const [productsError, setProductsError] = useState<Error | null>(null);
   const [isLoadingProducts, setIsLoadingProducts] = useState(false);
 
@@ -32,7 +33,6 @@ function App() {
   const [categoriesError, setCategoriesError] = useState<Error | null>(null);
 
   useEffect(() => {
-    // setIsLoadingCategories(true);
     fetch("http://localhost:8888/categories")
       .then((res) => res.json())
       .then((data) => {
@@ -52,7 +52,7 @@ function App() {
     fetch("http://localhost:8888/products")
       .then((res) => res.json())
       .then((data) => {
-        setProducts(data);
+        dispatch({ type: "loaded", products: data });
         setIsLoadingProducts(false);
       })
       .catch((err) => {
@@ -70,18 +70,12 @@ function App() {
         categories={categories}
         isLoadingCategories={isLoadingCategories}
         categoriesError={categoriesError}
-        onSubmit={
-          (product) =>
-            setProducts([...products, { id: products.length + 1, ...product }])
-          //We could also make a POST request to the server here
-        }
+        dispatch={dispatch}
       />
 
       <ProductsList
         products={products}
-        deleteProduct={(id: number) => {
-          setProducts(products.filter((p) => p.id !== id));
-        }}
+        dispatch={dispatch}
         isLoadingProducts={isLoadingProducts}
         productsError={productsError}
         categories={categories}

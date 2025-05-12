@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Category, Product } from "../App";
+import { Action } from "../reducers/productsReducer";
 // import { categories } from "../data";
 
 interface Props {
   products: Product[];
-  deleteProduct: (id: number) => void;
+  dispatch: (action: Action) => void;
   isLoadingProducts: boolean;
   productsError: Error | null;
   categories: Category[];
@@ -14,7 +15,7 @@ interface Props {
 
 function ProductsList({
   products,
-  deleteProduct,
+  dispatch,
   isLoadingProducts,
   productsError,
   categories,
@@ -87,7 +88,12 @@ function ProductsList({
                   <td>{categories.find((c) => c.id == p.category_id)?.name}</td>
                   <td>
                     <button
-                      onClick={() => deleteProduct(p.id)}
+                      onClick={() =>
+                        dispatch({
+                          type: "deleted",
+                          id: p.id,
+                        })
+                      }
                       className="btn btn-danger"
                     >
                       Delete
