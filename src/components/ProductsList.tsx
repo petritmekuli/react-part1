@@ -70,9 +70,13 @@ function ProductsList({
             <tr>
               <td>{productsError.message}</td>
             </tr>
-          ) : isLoadingProducts || products.length === 0 ? (
+          ) : isLoadingProducts ? (
             <tr>
               <td>Loading Products...</td>
+            </tr>
+          ) : products.length === 0 ? (
+            <tr>
+              <td>No products found.</td>
             </tr>
           ) : (
             <>
